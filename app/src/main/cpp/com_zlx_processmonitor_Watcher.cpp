@@ -31,10 +31,13 @@ Java_com_zlx_processmonitor_Watcher_createWathcer(JNIEnv* env, jobject thiz, jst
 
 JNIEXPORT jboolean JNICALL
 Java_com_zlx_processmonitor_Watcher_connectToMonitor(JNIEnv* env, jobject thiz) {
+    LOGE("======try connect monitor==========");
     if (g_process != NULL) {
+        LOGE("aaaaaaaaaaa");
         if (g_process->create_channel()) {
             return JNI_TRUE;
         }
         return JNI_FALSE;
     }
+    return JNI_FALSE;
 }

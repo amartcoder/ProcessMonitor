@@ -23,6 +23,14 @@ public class Watcher {
         }
     }
 
+    public void connectMonitor() {
+        if (connectToMonitor()) {
+            Log.i(TAG, "===========connect Monitor success=========");
+        } else {
+            Log.i(TAG, "===========connect Monitor failed=========");
+        }
+    }
+
     public Watcher(Context context) {
         mContext = context;
     }

@@ -1,5 +1,6 @@
 package com.zlx.processmonitor;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -21,11 +22,12 @@ public class MyService extends Service {
         super.onCreate();
         PackageManager pm = getPackageManager();
         try {
-            ApplicationInfo ai = pm.getApplicationInfo("com.zlx.processmonitor", PackageManager.GET_SERVICES);
+            @SuppressLint("WrongConstant") ApplicationInfo ai = pm.getApplicationInfo("com.zlx.processmonitor", PackageManager.GET_SERVICES);
             int userId = ai.uid;
             Log.i(Watcher.TAG, "userId=" + userId);
             Watcher watcher = new Watcher(this);
             watcher.createMonitor(String.valueOf(userId));
+            watcher.connectMonitor();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -34,7 +36,7 @@ public class MyService extends Service {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Log.i(Watcher.TAG, "EXEC" + i);
+                Log.i(Watcher.TAG, "EXEC " + i);
                 i ++;
             }
         }, 0, 1000*3);
