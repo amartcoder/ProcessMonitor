@@ -14,7 +14,8 @@ static const char* PATH = "/data/data/com.zlx.processmonitor/my.sock";
 static const char* SERVICE_NAME = "com.zlx.processmonitor/com.zlx.processmonitor.MyService";
 
 bool ProcessBase::create_channel() {
-
+    LOGE("bbbbbbbbbbbbbb");
+    return JNI_TRUE;
 }
 
 int ProcessBase::write_to_channel(void *data, int len) {
@@ -67,22 +68,21 @@ jobject Parent::get_jobj() const {
  * 连接服务器(子进程)
  */
 bool Parent::create_channel() {
-    LOGE("bbbbbbbbbbb");
+    LOGE("客户端 父进程开始连接");
     int sockfd;
-    struct sockaddr_un addr;
+    sockaddr_un addr;
     while(1) {
-        LOGE("客户端 父进程开始连接");
         sockfd = socket(AF_LOCAL, SOCK_STREAM, 0);
         if (sockfd < 0) {
             LOGE("客户端 父进程连接失败");
             return false;
         }
 
-        memset(&addr, 0, sizeof(sockaddr));
+        memset(&addr, 0, sizeof(addr));
         addr.sun_family = AF_LOCAL;
         strcpy(addr.sun_path, PATH);
 
-        if (connect(sockfd, (const sockaddr*) &addr, sizeof(sockaddr_un)) < 0) {
+        if (connect(sockfd, (sockaddr*) &addr, sizeof(addr)) < 0) {
             LOGE("客户端 父进程连接失败");
             close(sockfd);
             sleep(1);
@@ -192,24 +192,27 @@ void Child::restart_parent() {
 
 void* Child::parent_monitor() {
     handle_parent_die();
+
+    return NULL;
 }
 
 void Child::start_parent_monitor() {
     pthread_t tid;
 
-    pthread_create(&tid, NULL, RTN_MAP.thread_rtn, this);
+//    pthread_create(&tid, NULL, RTN_MAP.thread_rtn, this);
 }
 
 bool Child::create_channel() {
+    LOGE("==================Child::create_channel()====================");
     int listenfd, connfd;
     struct sockaddr_un addr;
 
     listenfd = socket(AF_LOCAL, SOCK_STREAM, 0);
     unlink(PATH);
-    memset(&addr, 0, sizeof(sockaddr));
+    memset(&addr, 0, sizeof(addr));
     addr.sun_family = AF_LOCAL;
     strcpy(addr.sun_path, PATH);
-    if (bind(listenfd, (const sockaddr*) &addr, sizeof(sockaddr_un)) < 0) {
+    if (bind(listenfd, (sockaddr*) &addr, sizeof(addr)) < 0) {
         LOGE("<<bind error, errorno(%d)>>", errno);
         return false;
     }
@@ -218,6 +221,7 @@ bool Child::create_channel() {
 
     while(1) {
         //返回client地址 阻塞式方法
+        LOGE("等待客户端(父进程)连接");
         if ((connfd = accept(listenfd, NULL, NULL)) < 0) {
             if (errno == EINTR)
                 continue;
@@ -250,7 +254,7 @@ void Child::listen_msg() {
             char pkg[256] = {0};
             //保证所读到的信息是指定客户端的
             if (FD_ISSET(m_channel, &rfds)) {
-                //阻塞式函数 读什么，什么都不读，依靠客户端主动断开连接(主进程被杀死)，read方法可以向下执行，开启主进程服务
+                //阻塞式函数 读什么，什么都不读，依靠客户端主动断开连接(主进程被杀死)，read方法可以向下执行，重启主进程服务
                 int result = read_from_channel(pkg, sizeof(pkg));
 //                LOGE("<<A message comes:%s>>");
 //                handle_msg((const char*) pkg);
@@ -264,10 +268,12 @@ void Child::listen_msg() {
 void Child::do_work() {
     LOGE("===========Child::do_work=========");
     //启动监视线程
-    start_parent_monitor();
+    //start_parent_monitor();
     //等待并且处理来自父进程发送的消息
     if (create_channel()) {
         listen_msg();
+    } else {
+        LOGE("create service monitor failed!");
     }
 }
 

@@ -10,13 +10,15 @@ extern "C" {
 #endif
 
 JNIEXPORT jboolean JNICALL
-Java_com_zlx_processmonitor_Watcher_createWathcer(JNIEnv *, jobject, jstring);
+Java_com_zlx_processmonitor_Watcher_createWathcer(JNIEnv*, jobject, jstring);
 
 JNIEXPORT jboolean JNICALL
-Java_com_zlx_processmonitor_Watcher_connectToMonitor(JNIEnv *, jobject);
+Java_com_zlx_processmonitor_Watcher_connectToMonitor(JNIEnv*, jobject);
 
 JNIEXPORT jboolean JNICALL
-Java_com_zlx_processmonitor_Watcher_sendMsgToMonitor(JNIEnv *, jobject, jstring);
+Java_com_zlx_processmonitor_Watcher_sendMsgToMonitor(JNIEnv*, jobject, jstring);
+
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM*, void*);
 
 #ifdef __cplusplus
 }

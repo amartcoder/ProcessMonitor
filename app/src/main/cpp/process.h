@@ -150,7 +150,7 @@ private:
 
     /**
 	 * 侦听父进程发送的消息
-	 *
+	 */
     void listen_msg();
     /**
 	 * 重新启动父进程.
@@ -161,11 +161,6 @@ private:
 	 * 处理来自父进程的消息
 	 */
     void handle_msg(const char* msg);
-
-    /**
-	 * 侦听父进程发送的消息
-	 */
-    void listen_msg();
 
     /**
 	 * 线程函数，用来检测父进程是否挂掉

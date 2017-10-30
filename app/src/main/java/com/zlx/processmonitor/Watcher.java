@@ -11,24 +11,22 @@ import java.util.ArrayList;
  */
 
 public class Watcher {
-    public static final String TAG = Watcher.class.getSimpleName();
+    public static final String TAG = "Native";
     private String mMontoredService = "MyService";
     private Context mContext;
 
-    public void createMonitor(String userId) {
+    public void createAppMonitor(String userId) {
         if (!createWathcer(userId)) {
             Log.i(TAG, "===========Monitor created failed=========");
         } else {
             Log.i(TAG, "===========Monitor created success=========");
         }
-    }
 
-    public void connectMonitor() {
-        if (connectToMonitor()) {
-            Log.i(TAG, "===========connect Monitor success=========");
-        } else {
-            Log.i(TAG, "===========connect Monitor failed=========");
-        }
+		if (!connectToMonitor()) {
+			Log.i(TAG, "===========connect Monitor failed=========");
+		} else {
+			Log.i(TAG, "===========connect Monitor success=========");
+		}
     }
 
     public Watcher(Context context) {

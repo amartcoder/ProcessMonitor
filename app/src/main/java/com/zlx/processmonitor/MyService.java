@@ -26,8 +26,7 @@ public class MyService extends Service {
             int userId = ai.uid;
             Log.i(Watcher.TAG, "userId=" + userId);
             Watcher watcher = new Watcher(this);
-            watcher.createMonitor(String.valueOf(userId));
-            watcher.connectMonitor();
+            watcher.createAppMonitor(String.valueOf(userId));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
