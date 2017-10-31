@@ -14,7 +14,6 @@ static const char* PATH = "/data/data/com.zlx.processmonitor/my.sock";
 static const char* SERVICE_NAME = "com.zlx.processmonitor/com.zlx.processmonitor.MyService";
 
 bool ProcessBase::create_channel() {
-    LOGE("bbbbbbbbbbbbbb");
     return JNI_TRUE;
 }
 

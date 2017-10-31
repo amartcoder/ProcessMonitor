@@ -34,7 +34,6 @@ Java_com_zlx_processmonitor_Watcher_connectToMonitor(JNIEnv* env, jobject thiz) 
     LOGE("======try connect monitor==========");
     if (g_process != NULL) {
         if (g_process->create_channel()) {
-            LOGE("aaaaaaaaaaaaaaaa");
             return JNI_TRUE;
         }
         return JNI_FALSE;

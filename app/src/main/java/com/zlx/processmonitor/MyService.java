@@ -12,6 +12,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MyService extends Service {
+	@Column(name="u_name")
+	String name;
+
     Timer timer;
     int i = 0;
     public MyService() {
